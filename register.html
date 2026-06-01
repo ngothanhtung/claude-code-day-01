@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500&display=swap"
+    rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            bg: '#090A14',
+            surface: '#0F1120',
+            surface2: '#161829',
+            border: '#1F2138',
+            primary: '#DF6B33',
+            'primary-light': '#F0824A',
+            'primary-dark': '#C25A26',
+            muted: '#6B7280',
+          },
+          fontFamily: {
+            poppins: ['Poppins', 'sans-serif'],
+            inter: ['Inter', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #090A14;
+    }
+
+    ::selection {
+      background: #DF6B33;
+      color: #090A14;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #090A14;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #1F2138;
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #DF6B33;
+    }
+
+    /* Entrance animations */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes orbFloat {
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      33% {
+        transform: translate(40px, -30px) scale(1.08);
+      }
+
+      66% {
+        transform: translate(-20px, 20px) scale(0.95);
+      }
+    }
+
+    @keyframes pulse-ring {
+      0% {
+        transform: scale(1);
+        opacity: 0.4;
+      }
+
+      50% {
+        transform: scale(1.15);
+        opacity: 0.1;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 0.4;
+      }
+    }
+
+    .animate-fade-up {
+      animation: fadeUp 0.7s cubic-bezier(.16, 1, .3, 1) forwards;
+      opacity: 0;
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.8s ease-out forwards;
+      opacity: 0;
+    }
+
+    .animate-orb {
+      animation: orbFloat 12s ease-in-out infinite;
+    }
+
+    .animate-delay-1 {
+      animation-delay: 0.1s;
+    }
+
+    .animate-delay-2 {
+      animation-delay: 0.2s;
+    }
+
+    .animate-delay-3 {
+      animation-delay: 0.35s;
+    }
+
+    .animate-delay-4 {
+      animation-delay: 0.5s;
+    }
+
+    .animate-delay-5 {
+      animation-delay: 0.65s;
+    }
+
+    .animate-delay-6 {
+      animation-delay: 0.8s;
+    }
+
+    /* Background orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      pointer-events: none;
+    }
+
+    /* Form glassmorphism card */
+    .glass-card {
+      background: rgba(15, 17, 32, 0.75);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.03),
+        0 24px 64px rgba(0, 0, 0, 0.6),
+        0 0 80px rgba(223, 107, 51, 0.06) inset;
+    }
+
+    /* Input focus glow */
+    .input-glow:focus {
+      box-shadow: 0 0 0 2px rgba(223, 107, 51, 0.3), 0 0 20px rgba(223, 107, 51, 0.08);
+      border-color: #DF6B33;
+    }
+
+    .input-error {
+      border-color: rgba(248, 113, 113, 0.6) !important;
+      box-shadow: 0 0 0 2px rgba(248, 113, 113, 0.15) !important;
+    }
+
+    /* Primary button shimmer */
+    .btn-primary {
+      background: linear-gradient(135deg, #DF6B33 0%, #F0824A 50%, #DF6B33 100%);
+      background-size: 200% auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.5s;
+    }
+
+    .btn-primary:hover::before {
+      transform: translateX(100%);
+    }
+
+    .btn-primary:hover {
+      background-position: right center;
+      box-shadow: 0 8px 32px rgba(223, 107, 51, 0.4), 0 0 0 1px rgba(223, 107, 51, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    /* Password toggle */
+    .password-toggle {
+      transition: color 0.2s;
+    }
+
+    .password-toggle:hover {
+      color: #DF6B33;
+    }
+
+    /* Ring pulse on logo */
+    .ring-pulse {
+      animation: pulse-ring 3s ease-in-out infinite;
+    }
+
+    /* Noise texture overlay */
+    .noise-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 50;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    }
+
+    /* Select styling */
+    select option {
+      background-color: #0F1120;
+      color: #fff;
+    }
+
+    select:focus {
+      box-shadow: 0 0 0 2px rgba(223, 107, 51, 0.3), 0 0 20px rgba(223, 107, 51, 0.08);
+      border-color: #DF6B33;
+    }
+
+    /* Progress steps */
+    .step-line {
+      flex: 1;
+      height: 2px;
+      background: #1F2138;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .step-line-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #DF6B33, #F0824A);
+      transition: width 0.4s ease;
+    }
+
+    /* Field group label */
+    .field-label {
+      display: block;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 0.75rem;
+      color: #D1D5DB;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* Custom checkbox */
+    .custom-checkbox {
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      border-radius: 5px;
+      border: 1.5px solid #1F2138;
+      background: #0F1120;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .custom-checkbox.checked {
+      background: #DF6B33;
+      border-color: #DF6B33;
+    }
+
+    .custom-checkbox:focus-within {
+      box-shadow: 0 0 0 2px rgba(223, 107, 51, 0.3);
+    }
+  </style>
+</head>
+
+<body class="font-inter text-white min-h-screen flex items-center justify-center overflow-x-hidden relative py-8">
+
+  <!-- Noise overlay -->
+  <div class="noise-overlay"></div>
+
+  <!-- Background orbs -->
+  <div class="orb animate-orb w-[500px] h-[500px] bg-[#DF6B33] opacity-[0.07]" style="top: -120px; left: -120px;"></div>
+  <div class="orb animate-orb w-[400px] h-[400px] bg-[#F0824A] opacity-[0.05]"
+    style="bottom: -80px; right: -80px; animation-delay: -4s;"></div>
+  <div class="orb animate-orb w-[300px] h-[300px] bg-[#6B21A8] opacity-[0.04]"
+    style="top: 50%; left: 55%; transform: translate(-50%,-50%); animation-delay: -8s;"></div>
+
+  <!-- Grid background -->
+  <div class="absolute inset-0" style="background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 48px 48px;">
+  </div>
+
+  <!-- Register card -->
+  <div class="relative z-10 w-full max-w-[520px] mx-4 animate-fade-up animate-delay-1">
+    <div class="glass-card rounded-3xl p-8 sm:p-10">
+
+      <!-- Logo / Brand mark -->
+      <div class="flex justify-center mb-8 animate-fade-in animate-delay-2">
+        <div class="relative">
+          <div class="absolute inset-0 rounded-2xl ring-pulse" style="border: 2px solid rgba(223,107,51,0.2);"></div>
+          <div class="w-14 h-14 rounded-2xl flex items-center justify-center"
+            style="background: linear-gradient(135deg, #DF6B33, #C25A26);">
+            <i data-lucide="user-plus" class="w-7 h-7 text-white"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Heading -->
+      <div class="text-center mb-8 animate-fade-up animate-delay-3">
+        <h1 class="font-poppins font-extrabold text-3xl sm:text-4xl text-white mb-2 tracking-tight">
+          Create account
+        </h1>
+        <p class="font-inter text-sm text-gray-400">
+          Join us today — it's free and only takes a minute
+        </p>
+      </div>
+
+      <!-- Form -->
+      <form id="registerForm" class="space-y-5 animate-fade-up animate-delay-4" novalidate>
+
+        <!-- Full Name -->
+        <div>
+          <label for="fullName" class="field-label">
+            Full name <span class="text-[#DF6B33]">*</span>
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <i data-lucide="user" class="w-4 h-4 text-gray-500"></i>
+            </div>
+            <input id="fullName" type="text" placeholder="John Doe" autocomplete="name" class="input-glow w-full pl-11 pr-4 py-3.5 rounded-xl
+                     bg-[#0F1120] border border-[#1F2138]
+                     text-white placeholder-gray-600
+                     font-inter text-sm
+                     focus:outline-none transition-all duration-300" />
+          </div>
+          <p id="fullNameError" class="hidden mt-1.5 text-xs font-inter text-red-400 flex items-center gap-1.5">
+            <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i>
+            <span></span>
+          </p>
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label for="email" class="field-label">
+            Email address <span class="text-[#DF6B33]">*</span>
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <i data-lucide="mail" class="w-4 h-4 text-gray-500"></i>
+            </div>
+            <input id="email" type="email" placeholder="you@example.com" autocomplete="email" class="input-glow w-full pl-11 pr-4 py-3.5 rounded-xl
+                     bg-[#0F1120] border border-[#1F2138]
+                     text-white placeholder-gray-600
+                     font-inter text-sm
+                     focus:outline-none transition-all duration-300" />
+          </div>
+          <p id="emailError" class="hidden mt-1.5 text-xs font-inter text-red-400 flex items-center gap-1.5">
+            <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i>
+            <span></span>
+          </p>
+        </div>
+
+        <!-- Gender & Phone (2-column on sm+) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+
+          <!-- Gender -->
+          <div>
+            <label for="gender" class="field-label">
+              Gender <span class="text-gray-600 font-normal normal-case" style="letter-spacing:0;">(optional)</span>
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <i data-lucide="users" class="w-4 h-4 text-gray-500"></i>
+              </div>
+              <select id="gender" class="input-glow w-full pl-11 pr-8 py-3.5 rounded-xl
+                       bg-[#0F1120] border border-[#1F2138]
+                       text-white font-inter text-sm
+                       focus:outline-none transition-all duration-300
+                       appearance-none cursor-pointer">
+                <option value="" class="text-gray-600">Select gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+                <option value="prefer_not">Prefer not to say</option>
+              </select>
+              <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Phone -->
+          <div>
+            <label for="phone" class="field-label">
+              Phone <span class="text-gray-600 font-normal normal-case" style="letter-spacing:0;">(optional)</span>
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <i data-lucide="phone" class="w-4 h-4 text-gray-500"></i>
+              </div>
+              <input id="phone" type="tel" placeholder="0912 345 678" autocomplete="tel" maxlength="10" class="input-glow w-full pl-11 pr-4 py-3.5 rounded-xl
+                       bg-[#0F1120] border border-[#1F2138]
+                       text-white placeholder-gray-600
+                       font-inter text-sm
+                       focus:outline-none transition-all duration-300" />
+            </div>
+            <p id="phoneError" class="hidden mt-1.5 text-xs font-inter text-red-400 flex items-center gap-1.5">
+              <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i>
+              <span></span>
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Address -->
+        <div>
+          <label for="address" class="field-label">
+            Address <span class="text-gray-600 font-normal normal-case" style="letter-spacing:0;">(optional)</span>
+          </label>
+          <div class="relative">
+            <div class="absolute top-3.5 left-0 pl-4 flex items-start pointer-events-none">
+              <i data-lucide="map-pin" class="w-4 h-4 text-gray-500"></i>
+            </div>
+            <textarea id="address" rows="2" placeholder="123 Main Street, City, Country" autocomplete="street-address" class="input-glow w-full pl-11 pr-4 py-3.5 rounded-xl
+                     bg-[#0F1120] border border-[#1F2138]
+                     text-white placeholder-gray-600
+                     font-inter text-sm
+                     focus:outline-none transition-all duration-300
+                     resize-none"></textarea>
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label for="password" class="field-label">
+            Password <span class="text-[#DF6B33]">*</span>
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <i data-lucide="lock" class="w-4 h-4 text-gray-500"></i>
+            </div>
+            <input id="password" type="password" placeholder="Min. 8 characters" autocomplete="new-password" class="input-glow w-full pl-11 pr-12 py-3.5 rounded-xl
+                     bg-[#0F1120] border border-[#1F2138]
+                     text-white placeholder-gray-600
+                     font-inter text-sm
+                     focus:outline-none transition-all duration-300" />
+            <button type="button" id="togglePassword"
+              class="password-toggle absolute inset-y-0 right-0 pr-4 flex items-center text-gray-500 cursor-pointer"
+              aria-label="Toggle password visibility">
+              <i data-lucide="eye-off" id="eyeIconPwd" class="w-4 h-4"></i>
+            </button>
+          </div>
+          <p id="passwordError" class="hidden mt-1.5 text-xs font-inter text-red-400 flex items-center gap-1.5">
+            <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i>
+            <span></span>
+          </p>
+          <!-- Password strength bar -->
+          <div id="strengthBar" class="hidden mt-2">
+            <div class="flex gap-1 mb-1">
+              <div id="s1" class="h-1 flex-1 rounded-full bg-[#1F2138] transition-all duration-300"></div>
+              <div id="s2" class="h-1 flex-1 rounded-full bg-[#1F2138] transition-all duration-300"></div>
+              <div id="s3" class="h-1 flex-1 rounded-full bg-[#1F2138] transition-all duration-300"></div>
+              <div id="s4" class="h-1 flex-1 rounded-full bg-[#1F2138] transition-all duration-300"></div>
+            </div>
+            <p id="strengthLabel" class="text-xs font-inter text-gray-500"></p>
+          </div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div>
+          <label for="confirmPassword" class="field-label">
+            Confirm password <span class="text-[#DF6B33]">*</span>
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <i data-lucide="shield-check" class="w-4 h-4 text-gray-500"></i>
+            </div>
+            <input id="confirmPassword" type="password" placeholder="Re-enter your password" autocomplete="new-password" class="input-glow w-full pl-11 pr-12 py-3.5 rounded-xl
+                     bg-[#0F1120] border border-[#1F2138]
+                     text-white placeholder-gray-600
+                     font-inter text-sm
+                     focus:outline-none transition-all duration-300" />
+            <button type="button" id="toggleConfirmPassword"
+              class="password-toggle absolute inset-y-0 right-0 pr-4 flex items-center text-gray-500 cursor-pointer"
+              aria-label="Toggle confirm password visibility">
+              <i data-lucide="eye-off" id="eyeIconConfirm" class="w-4 h-4"></i>
+            </button>
+          </div>
+          <p id="confirmPasswordError" class="hidden mt-1.5 text-xs font-inter text-red-400 flex items-center gap-1.5">
+            <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i>
+            <span></span>
+          </p>
+        </div>
+
+        <!-- Terms & Conditions -->
+        <div>
+          <label class="flex items-start gap-3 cursor-pointer group select-none">
+            <div class="relative mt-0.5">
+              <input type="checkbox" id="agreeTerms" class="sr-only peer">
+              <div id="termsCheckbox" class="w-5 h-5 rounded-md border border-[#1F2138]
+                          bg-[#0F1120] peer-checked:bg-[#DF6B33] peer-checked:border-[#DF6B33]
+                          peer-focus:ring-2 peer-focus:ring-[#DF6B33]/30
+                          transition-all duration-200
+                          flex items-center justify-center">
+                <i data-lucide="check"
+                  class="w-3 h-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-150"></i>
+              </div>
+            </div>
+            <span
+              class="font-inter text-sm text-gray-400 group-hover:text-gray-200 transition-colors duration-200 leading-relaxed">
+              I agree to the
+              <a href="#" class="text-[#DF6B33] hover:text-[#F0824A] hover:underline underline-offset-4 transition-colors">Terms
+                of Service</a>
+              and
+              <a href="#"
+                class="text-[#DF6B33] hover:text-[#F0824A] hover:underline underline-offset-4 transition-colors">Privacy
+                Policy</a>
+              <span class="text-[#DF6B33]">*</span>
+            </span>
+          </label>
+          <p id="termsError" class="hidden mt-1.5 text-xs font-inter text-red-400 flex items-center gap-1.5">
+            <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i>
+            <span></span>
+          </p>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" id="submitBtn" class="btn-primary w-full py-3.5 rounded-xl
+                 font-poppins font-bold text-base text-white
+                 tracking-wide
+                 transition-all duration-300
+                 cursor-pointer mt-2">
+          <span id="btnText">Create account</span>
+          <span id="btnLoading" class="hidden items-center justify-center gap-2">
+            <svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+            Creating account…
+          </span>
+        </button>
+
+      </form>
+
+      <!-- Back to login -->
+      <p class="text-center font-inter text-sm text-gray-500 mt-8 animate-fade-up animate-delay-5">
+        Already have an account?
+        <a href="login.html"
+          class="text-[#DF6B33] hover:text-[#F0824A] font-medium hover:underline underline-offset-4 transition-colors duration-200">
+          Sign in
+        </a>
+      </p>
+    </div>
+
+    <!-- Footer note -->
+    <p class="text-center font-inter text-xs text-gray-700 mt-6 animate-fade-in animate-delay-6">
+      By creating an account, you agree to our
+      <a href="#" class="hover:text-gray-400 transition-colors">Terms</a> &amp;
+      <a href="#" class="hover:text-gray-400 transition-colors">Privacy Policy</a>
+    </p>
+  </div>
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    /* ── Toggle password visibility ── */
+    function setupToggle(btnId, inputId, iconId) {
+      const btn = document.getElementById(btnId);
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+      btn.addEventListener('click', () => {
+        const isPassword = input.type === 'password';
+        input.type = isPassword ? 'text' : 'password';
+        icon.setAttribute('data-lucide', isPassword ? 'eye' : 'eye-off');
+        lucide.createIcons();
+      });
+    }
+    setupToggle('togglePassword', 'password', 'eyeIconPwd');
+    setupToggle('toggleConfirmPassword', 'confirmPassword', 'eyeIconConfirm');
+
+    /* ── Password strength indicator ── */
+    const passwordInput = document.getElementById('password');
+    const strengthBar = document.getElementById('strengthBar');
+    const strengthLabel = document.getElementById('strengthLabel');
+    const segments = ['s1', 's2', 's3', 's4'].map(id => document.getElementById(id));
+    const strengthColors = ['#EF4444', '#F59E0B', '#3B82F6', '#22C55E'];
+    const strengthNames = ['Weak', 'Fair', 'Good', 'Strong'];
+
+    passwordInput.addEventListener('input', () => {
+      const val = passwordInput.value;
+      if (!val) { strengthBar.classList.add('hidden'); return; }
+      strengthBar.classList.remove('hidden');
+
+      let score = 0;
+      if (val.length >= 8) score++;
+      if (/[A-Z]/.test(val)) score++;
+      if (/[0-9]/.test(val)) score++;
+      if (/[^A-Za-z0-9]/.test(val)) score++;
+
+      segments.forEach((seg, i) => {
+        seg.style.backgroundColor = i < score ? strengthColors[score - 1] : '#1F2138';
+      });
+      strengthLabel.textContent = strengthNames[score - 1] || '';
+      strengthLabel.style.color = strengthColors[score - 1] || '#6B7280';
+    });
+
+    /* ── Only allow digits in phone ── */
+    document.getElementById('phone').addEventListener('input', function () {
+      this.value = this.value.replace(/\D/g, '').slice(0, 10);
+    });
+
+    /* ── Validation helpers ── */
+    function showError(id, msg) {
+      const el = document.getElementById(id);
+      el.querySelector('span').textContent = msg;
+      el.classList.remove('hidden');
+      el.classList.add('flex');
+      lucide.createIcons();
+    }
+    function hideError(id) {
+      const el = document.getElementById(id);
+      el.classList.add('hidden');
+      el.classList.remove('flex');
+    }
+    function setInputError(id, hasError) {
+      const el = document.getElementById(id);
+      if (hasError) el.classList.add('input-error');
+      else el.classList.remove('input-error');
+    }
+
+    /* ── Form submission ── */
+    const form = document.getElementById('registerForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    const btnLoading = document.getElementById('btnLoading');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const fullName = document.getElementById('fullName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      const agreeTerms = document.getElementById('agreeTerms').checked;
+
+      // Clear all errors
+      ['fullNameError', 'emailError', 'phoneError', 'passwordError', 'confirmPasswordError', 'termsError']
+        .forEach(hideError);
+      ['fullName', 'email', 'phone', 'password', 'confirmPassword']
+        .forEach(id => setInputError(id, false));
+
+      let hasError = false;
+
+      // Full name
+      if (!fullName) {
+        showError('fullNameError', 'Full name is required.');
+        setInputError('fullName', true);
+        hasError = true;
+      }
+
+      // Email
+      if (!email) {
+        showError('emailError', 'Email address is required.');
+        setInputError('email', true);
+        hasError = true;
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showError('emailError', 'Please enter a valid email address.');
+        setInputError('email', true);
+        hasError = true;
+      }
+
+      // Phone (optional — only validate if not empty)
+      if (phone && !/^\d{10}$/.test(phone)) {
+        showError('phoneError', 'Phone number must be exactly 10 digits.');
+        setInputError('phone', true);
+        hasError = true;
+      }
+
+      // Password
+      if (!password) {
+        showError('passwordError', 'Password is required.');
+        setInputError('password', true);
+        hasError = true;
+      } else if (password.length < 8) {
+        showError('passwordError', 'Password must be at least 8 characters.');
+        setInputError('password', true);
+        hasError = true;
+      }
+
+      // Confirm password
+      if (!confirmPassword) {
+        showError('confirmPasswordError', 'Please confirm your password.');
+        setInputError('confirmPassword', true);
+        hasError = true;
+      } else if (password && confirmPassword !== password) {
+        showError('confirmPasswordError', 'Passwords do not match.');
+        setInputError('confirmPassword', true);
+        hasError = true;
+      }
+
+      // Terms
+      if (!agreeTerms) {
+        showError('termsError', 'You must agree to the Terms of Service to continue.');
+        hasError = true;
+      }
+
+      if (hasError) return;
+
+      // Simulate loading
+      btnText.classList.add('hidden');
+      btnLoading.classList.remove('hidden');
+      btnLoading.classList.add('flex');
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = '0.8';
+
+      setTimeout(() => {
+        btnText.classList.remove('hidden');
+        btnLoading.classList.add('hidden');
+        btnLoading.classList.remove('flex');
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '1';
+        // Here you would redirect or call your registration API
+      }, 1800);
+    });
+  </script>
+</body>
+
+</html>
